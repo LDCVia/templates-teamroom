@@ -76,7 +76,7 @@ xcomponents.models['MainTopic'] = {
     field: 'Categories',
     type: 'select-multiple',
     options: {
-      endpoint: xcomponents.host + '/list/' + xcomponents.db + '/MainTopic/Categories'
+      endpoint: xcomponents.host + '/list/' + xcomponents.db + '/Mission/Categories'
     },
     read: false,
     edit: true
@@ -124,13 +124,11 @@ xcomponents.models['MainTopic'] = {
   }, {
     label: 'Meeting Time',
     field: 'MtgTime',
-    type: 'time',
     read: true,
     edit: true
   }, {
     label: 'Duration (mins)',
     field: 'Duration',
-    type: 'number',
     read: true,
     edit: true
   }, {
@@ -212,6 +210,7 @@ xcomponents.models['Mission'] = {
   fields: [{
     label: 'Mission',
     field: 'Mission',
+    type: 'multiline',
     required: true
   }, {
     label: 'Team Name',
@@ -219,14 +218,8 @@ xcomponents.models['Mission'] = {
   }, {
     label: 'Categories',
     field: 'Categories',
-    read: false,
-    edit: true
-  }, {
-    label: 'Categories',
-    field: 'Categories',
     type: 'implodelist',
-    read: true,
-    edit: false
+    savetype: "explode"
   }]
 };
 

@@ -25,27 +25,38 @@ app.factory('xcUtils', function($rootScope, $http) {
 				for (var j=0; j<fields.length; j++) {
 					_res.push( form[ fields[j] ] );
 				}
-
 				form[fieldName] = _res.join(' ');
-
+			}
+			for (var i=0; i<model.fields.length; i++){
+				if (model.fields[i].savetype){
+					form[model.fields[i].field] = form[model.fields[i].field].split(",");
+				}else if (model.fields[i].field.indexOf("__parsed") > -1){
+					//Add LDC Via RT field
+					form.From = $rootScope.username;
+					form[model.fields[i].field.split("_")[0]] = {
+						"type": "multipart",
+						"content": [{
+							"contentType": "text/html; charset=UTF-8",
+							"data": form[model.fields[i].field]
+						}]
+					};
+				}
 			}
 
-			//Add LDC Via fields
-			form.From = $rootScope.username;
-			form.Body = {
-				"type": "multipart",
-				"content": [{
-					"contentType": "text/html; charset=UTF-8",
-					"data": form.Body__parsed
-				}]
-			};
 			try{
 				var fileInput = document.getElementById('file');
 				if (fileInput && fileInput.value != ""){
+					form.file = {
+						"type": "multipart",
+						"content": [{
+							"contentType": "text/html; charset=UTF-8",
+							"data": "See Attached File (" + fileInput.value + ")"
+						}]
+					};
 					var file = fileInput.files[0];
 					var reader = new FileReader();
 					reader.onload = function(e) {
-						form.Body.content.push({
+						form.file.content.push({
 							"contentType": file.type + "; name=\"" + file.name + "\"",
 							"contentDisposition": "attachment; filename=\"" + file.name + "\"",
 							"contentTransferEncoding": "base64",

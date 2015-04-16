@@ -190,7 +190,7 @@ app.filter('fltr', function($interpolate, $filter, xcUtils) {
 	};
 });
 
-/* xcomponents 0.1.0 2015-04-15 3:51 */
+/* xcomponents 0.1.0 2015-04-16 2:11 */
 var app = angular.module("xcomponents");
 
 app.controller( "BaseController", [
@@ -858,27 +858,38 @@ app.factory('xcUtils', function($rootScope, $http) {
 				for (var j=0; j<fields.length; j++) {
 					_res.push( form[ fields[j] ] );
 				}
-
 				form[fieldName] = _res.join(' ');
-
+			}
+			for (var i=0; i<model.fields.length; i++){
+				if (model.fields[i].savetype){
+					form[model.fields[i].field] = form[model.fields[i].field].split(",");
+				}else if (model.fields[i].field.indexOf("__parsed") > -1){
+					//Add LDC Via RT field
+					form.From = $rootScope.username;
+					form[model.fields[i].field.split("_")[0]] = {
+						"type": "multipart",
+						"content": [{
+							"contentType": "text/html; charset=UTF-8",
+							"data": form[model.fields[i].field]
+						}]
+					};
+				}
 			}
 
-			//Add LDC Via fields
-			form.From = $rootScope.username;
-			form.Body = {
-				"type": "multipart",
-				"content": [{
-					"contentType": "text/html; charset=UTF-8",
-					"data": form.Body__parsed
-				}]
-			};
 			try{
 				var fileInput = document.getElementById('file');
 				if (fileInput && fileInput.value != ""){
+					form.file = {
+						"type": "multipart",
+						"content": [{
+							"contentType": "text/html; charset=UTF-8",
+							"data": "See Attached File (" + fileInput.value + ")"
+						}]
+					};
 					var file = fileInput.files[0];
 					var reader = new FileReader();
 					reader.onload = function(e) {
-						form.Body.content.push({
+						form.file.content.push({
 							"contentType": file.type + "; name=\"" + file.name + "\"",
 							"contentDisposition": "attachment; filename=\"" + file.name + "\"",
 							"contentTransferEncoding": "base64",
@@ -1732,15 +1743,15 @@ app.directive('xcImage', function() {
 			$scope.imageSrc = null;
 
 			$rootScope.$on('selectItemEvent', function(ev, item) {
-
+				
 				$scope.imageSrc = null;
 
 				if ( item[$scope.sourceField] != null && item[$scope.sourceField].length > 0) {
-
+			
 					$scope.imageSrc = xcUtils.getConfig('imageBase') + item[$scope.sourceField];
 
 				}
-
+	
 			});
 
 		}
@@ -2759,7 +2770,7 @@ angular.module("xc-form-modal-edit.html", []).run(["$templateCache", function($t
     "		<div class=\"form-group\" ng-repeat=\"field in fieldsEdit\" ng-class=\"{ 'has-error': cardForm[field.field].$dirty && cardForm[field.field].$invalid }\">\n" +
     "			<label class=\"col-xs-3 control-label\" ng-if=\"field.label != null && field.type != 'html'\">{{field.label}}</label>\n" +
     "			<label class=\"col-md-3 control-label\" ng-if=\"field.label != null && field.type =='html'\">{{field.label}}</label>\n" +
-    "			<div class=\"col-xs-9\" ng-if=\"field.type=='text' || field.type=='link'\">\n" +
+    "			<div class=\"col-xs-9\" ng-if=\"field.type=='text' || field.type=='link' || field.type=='implodelist'\">\n" +
     "				<input class=\"form-control\" name=\"{{field.field}}\" ng-model=\"selectedItem[field.field]\" ng-required=\"field.required\"  />\n" +
     "				<a class=\"fa fa-times-circle fa-lg clearer\" ng-hide=\"isEmpty(selectedItem[field.field])\" ng-click=\"clearField(field.field)\"></a>\n" +
     "			</div>\n" +

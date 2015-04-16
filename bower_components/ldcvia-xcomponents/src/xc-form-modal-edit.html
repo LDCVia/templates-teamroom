@@ -22,7 +22,7 @@
 		<div class="form-group" ng-repeat="field in fieldsEdit" ng-class="{ 'has-error': cardForm[field.field].$dirty && cardForm[field.field].$invalid }">
 			<label class="col-xs-3 control-label" ng-if="field.label != null && field.type != 'html'">{{field.label}}</label>
 			<label class="col-md-3 control-label" ng-if="field.label != null && field.type =='html'">{{field.label}}</label>
-			<div class="col-xs-9" ng-if="field.type=='text' || field.type=='link'">
+			<div class="col-xs-9" ng-if="field.type=='text' || field.type=='link' || field.type=='implodelist'">
 				<input class="form-control" name="{{field.field}}" ng-model="selectedItem[field.field]" ng-required="field.required"  />
 				<a class="fa fa-times-circle fa-lg clearer" ng-hide="isEmpty(selectedItem[field.field])" ng-click="clearField(field.field)"></a>
 			</div>
