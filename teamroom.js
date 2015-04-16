@@ -11,6 +11,11 @@ xcomponents.readonly = false;
 Define Header and Footer options
 */
 xcomponents.menuOptions = [{
+  label: 'Settings',
+  isSecondary: true,
+  icon: 'fa-cogs',
+  url: '#/settings'
+}, {
   label: 'Logout',
   isSecondary: true,
   icon: 'fa-sign-out',
@@ -27,22 +32,14 @@ xcomponents.menuOptions = [{
   label: 'By Author',
   url: '#/author',
   icon: 'fa-user'
+}, {
+  label: 'By Milestone/Event',
+  url: '#/milestone',
+  icon: 'fa-suitcase'
 }];
 
-xcomponents.footerOptions = [{
-  label: 'By Date',
-  url: '#/home',
-  icon: 'fa-calendar'
-}, {
-  label: 'By Category',
-  url: '#/category',
-  icon: 'fa-list'
-}, {
-  label: 'By Author',
-  url: '#/author',
-  icon: 'fa-user'
-}];
-xcomponents.footerTitle = "LDC Via Discussion using XComponents (" + xcomponents.appVersion + ")";
+xcomponents.footerOptions = [];
+xcomponents.footerTitle = "LDC Via Teamroom using XComponents (" + xcomponents.appVersion + ")";
 
 /*
 Define the main Topic model
@@ -60,6 +57,15 @@ xcomponents.models['MainTopic'] = {
     edit: false,
     read: true
   }, {
+    label: 'Document Type',
+    field: 'DocType',
+    type: 'select',
+    options: {
+      endpoint: xcomponents.host + '/list/' + xcomponents.db + '/Mission/DocType'
+    },
+    read: false,
+    edit: true
+  }, {
     label: 'Category',
     field: 'Categories',
     type: 'implodelist',
@@ -75,10 +81,61 @@ xcomponents.models['MainTopic'] = {
     read: false,
     edit: true
   }, {
+    label: 'Milestone',
+    field: 'Milestones',
+    type: 'select',
+    options: {
+      endpoint: xcomponents.host + '/list/' + xcomponents.db + '/MainTopic/Subject'
+    },
+    read: true,
+    edit: true
+  }, {
+    label: 'Interested People',
+    field: 'People',
+    type: 'notesname',
+    read: true,
+    edit: false
+  }, {
+    label: 'Interested People',
+    field: 'People',
+    type: 'select-multiple',
+    options: {
+      endpoint: xcomponents.host + '/users'
+    },
+    read: false,
+    edit: true
+  }, {
+    label: 'Due Date',
+    field: 'DueDate',
+    type: 'date',
+    read: true,
+    edit: true
+  }, {
     label: 'Date Created',
     field: '__created',
     type: 'date',
     edit: false
+  }, {
+    label: 'Meeting Date',
+    field: 'MtgDate',
+    type: 'date',
+    read: true,
+    edit: true
+  }, {
+    label: 'Meeting Time',
+    field: 'MtgTime',
+    type: 'time',
+    read: true,
+    edit: true
+  }, {
+    label: 'Duration (mins)',
+    field: 'Duration',
+    type: 'number',
+    read: true,
+    edit: true
+  }, {
+    label: 'Location',
+    field: 'Location'
   }, {
     label: 'Body',
     field: 'Body__parsed',
@@ -150,6 +207,29 @@ xcomponents.models['Response'] = {
   }]
 };
 
+xcomponents.models['Mission'] = {
+  name: 'Mission',
+  fields: [{
+    label: 'Mission',
+    field: 'Mission',
+    required: true
+  }, {
+    label: 'Team Name',
+    field: 'TeamName'
+  }, {
+    label: 'Categories',
+    field: 'Categories',
+    read: false,
+    edit: true
+  }, {
+    label: 'Categories',
+    field: 'Categories',
+    type: 'implodelist',
+    read: true,
+    edit: false
+  }]
+};
+
 /*
  Inject custom code for LDC Via handling
 */
@@ -173,6 +253,14 @@ xcomponents.addCallback(function() {
     });
     $routeProvider.when('/author', {
       templateUrl: 'author.html',
+      controller: 'xcController'
+    });
+    $routeProvider.when('/milestone', {
+      templateUrl: 'milestone.html',
+      controller: 'xcController'
+    });
+    $routeProvider.when('/settings', {
+      templateUrl: 'settings.html',
       controller: 'xcController'
     });
     $routeProvider.

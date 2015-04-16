@@ -2,7 +2,7 @@
 <xc-layout>
   <xc-list
     model-name="MainTopic"
-    title="By Category"
+    title="By Milestone"
     url=":host/search/:db/MainTopic?count=20"
     documenturl=":host/document/:db/MainTopic/:id"
     responseurl=":host/responses/:db/MainTopic/:id?expand=true"
@@ -17,8 +17,8 @@
     autoload-first="true"
     allow-search="false"
     type="accordion-remote"
-    categoryurl=":host/list/:db/MainTopic/Categories"
-    categoryfield="Categories"
+    categoryurl=":host/list/:db/MainTopic/Milestones"
+    categoryfield="Milestones"
     category-field-type="text"
     group-by="Categories"
     infinite-scroll="false">

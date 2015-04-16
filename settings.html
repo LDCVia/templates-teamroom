@@ -1,0 +1,29 @@
+    <xc-header title="LDC Via Teamroom"></xc-header>
+    <xc-layout>
+      <xc-list
+        model-name="Mission"
+        title="Mission"
+        url=":host/collections/:db/Mission?count=20"
+        documenturl=":host/document/:db/Mission/:id"
+        list-width="5"
+        allow-add="false"
+        order-by="__created"
+        order-reversed="true"
+        summary-field="Mission"
+        details-field="__created"
+        details-field-type="date"
+        image-placeholder-icon="document"
+        autoload-first="true"
+        type="flat"
+        group-by="Categories"
+        infinite-scroll="false">
+        <xc-form
+          model-name="Mission"
+          default-text="Select a topic from the list"
+          url=":host/document/:db/Mission/:id"
+          allow-edit="true"
+          >
+        </xc-form>
+      </xc-list>
+    </xc-layout>
+    <xc-footer></xc-footer>
