@@ -862,7 +862,9 @@ app.factory('xcUtils', function($rootScope, $http) {
 			}
 			for (var i=0; i<model.fields.length; i++){
 				if (model.fields[i].savetype){
-					form[model.fields[i].field] = form[model.fields[i].field].split(",");
+					if (!Array.isArray(form[model.fields[i].field])){
+						form[model.fields[i].field] = form[model.fields[i].field].split(",");
+					}
 				}else if (model.fields[i].field.indexOf("__parsed") > -1){
 					//Add LDC Via RT field
 					form.From = $rootScope.username;
@@ -1743,15 +1745,15 @@ app.directive('xcImage', function() {
 			$scope.imageSrc = null;
 
 			$rootScope.$on('selectItemEvent', function(ev, item) {
-				
+
 				$scope.imageSrc = null;
 
 				if ( item[$scope.sourceField] != null && item[$scope.sourceField].length > 0) {
-			
+
 					$scope.imageSrc = xcUtils.getConfig('imageBase') + item[$scope.sourceField];
 
 				}
-	
+
 			});
 
 		}

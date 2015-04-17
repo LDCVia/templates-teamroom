@@ -2,7 +2,7 @@
 Basic configuration of the application
 */
 
-xcomponents.appVersion = '201504151600';
+xcomponents.appVersion = '201504171300';
 xcomponents.host = 'https://' + gup('host') + '/1.0';
 xcomponents.db = gup('db');
 xcomponents.apikey = null;
@@ -218,6 +218,11 @@ xcomponents.models['Mission'] = {
   }, {
     label: 'Categories',
     field: 'Categories',
+    type: 'implodelist',
+    savetype: "explode"
+  }, {
+    label: 'Document Types',
+    field: 'DocType',
     type: 'implodelist',
     savetype: "explode"
   }]
